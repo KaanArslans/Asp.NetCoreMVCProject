@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -64,10 +65,23 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Genres" asp-action="Index">Genres</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Directors" asp-action="Login">Login</a>
-                        </li>
+                         @{
+            if (User.HasClaim("Director", "true"))
+            {
+                                <form asp-controller="Directors" asp-action="Logout" method="post" class="form-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-danger">Logout</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Directors" asp-action="Login">Login</a>
+                                </li>
+                            }
+                        }
                     </ul>
+                    
                 </div>
             </div>
         </nav>
