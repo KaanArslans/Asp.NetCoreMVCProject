@@ -11,7 +11,9 @@ using DataAccess.Entities;
 using Business.Models;
 using Business.Services;
 using System.Data;
-
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 //Generated from Custom Template.
 namespace MVC.Controllers
 {
@@ -121,5 +123,49 @@ namespace MVC.Controllers
             // TODO: Add delete service logic here
             return RedirectToAction(nameof(Index));
         }
-	}
+        #region User Authentication
+        public IActionResult Login()
+        {
+            return View(); // returning the Login view to the user for entering the user name and password
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public IActionResult Login(DirectoryModel director)
+        {
+            // checking the active user from the database table by the user name and password
+            var existingUser = _directorService.Query().SingleOrDefault(u => u.UserName == director.UserName && u.Surname == director.Surname);
+            if (existingUser is null) // if an active user with the entered user name and password can't be found in the database table
+            {
+                ModelState.AddModelError("", "Invalid user name and surname!"); // send the invalid message to the view's validation summary 
+                return View(); // returning the Login view
+            }
+
+            // Creating the claim list that will be hashed in the authentication cookie which will be sent with each request to the web application.
+            // Only non-critical user data, which will be generally used in the web application such as user name to show in the views or user role
+            // to check if the user is authorized to perform specific actions, should be put in the claim list.
+            // Critical data such as password must never be put in the claim list!
+            List<Claim> userClaims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.Name, existingUser.UserName),
+                new Claim(ClaimTypes.Surname, existingUser.Surname)
+            };
+
+            // creating an identity by the claim list and default cookie authentication
+            var userIdentity = new ClaimsIdentity(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // creating a principal by the identity
+            var userPrincipal = new ClaimsPrincipal(userIdentity);
+
+            // signing the user in to the MVC web application and returning the hashed authentication cookie to the client
+            HttpContext.SignInAsync(userPrincipal);
+
+            // redirecting user to the home page
+            return RedirectToAction("Index", "Home");
+        }
+        #endregion
+    }
+
+
+
 }
+
