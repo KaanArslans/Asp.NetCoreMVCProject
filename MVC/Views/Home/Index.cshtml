@@ -1,11 +1,84 @@
-﻿@{
+﻿@using System.Security.Claims
+@{
     ViewData["Title"] = "Home Page";
+    var userName = User.FindFirst(ClaimTypes.Name)?.Value;
+    var surName = User.FindFirst(ClaimTypes.Surname)?.Value;
 }
 
-<div class="jumbotron text-center">
-    <h1 class="display-4">Welcome To Movie Project</h1>
-    <p class="lead">Discover the Best Movies!</p>
-    <hr class="my-4">
-    <p>Explore our vast collection of movies and stay entertained.</p>
-    
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewData["Title"]</title>
+
+    <!-- Bootstrap CSS (you can replace this with your preferred CSS framework or styles) -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Montserrat font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            padding-top: 56px;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8f9fa;
+            color: #495057;
+        }
+
+        .jumbotron {
+            background-color: transparent;
+            color: #495057;
+            padding: 80px 0;
+            margin-bottom: 0;
+        }
+
+        .lead {
+            font-size: 3rem;
+            color: #495057;
+            margin-bottom: 1.5rem;
+        }
+
+        .display-4 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        hr {
+            border-color: #495057;
+            margin: 2rem 0;
+        }
+
+        /* Add more styles as needed */
+    </style>
+</head>
+<body>
+
+    <header>
+        <!-- Your header content goes here -->
+    </header>
+
+    <div class="jumbotron text-center">
+        @{
+            if (User.HasClaim("Director", "true"))
+            {
+                <h1 class="display-4">Welcome, @userName @surName!</h1>
+                <p class="lead">Discover the Best Movies!</p>
+                <hr class="my-4">
+                <p>Explore our vast collection of movies and stay entertained.</p>
+            }
+            else
+            {
+                <p class="lead">Discover the Best Movies!</p>
+                <hr class="my-4">
+                <p>Explore our vast collection of movies and stay entertained. And if you are a director, login with your name and surname!</p>
+            }
+        }
+    </div>
+
+    <!-- Your main content goes here -->
+    <!-- Bootstrap bundle (includes Popper.js) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
