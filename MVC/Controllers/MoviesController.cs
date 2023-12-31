@@ -12,6 +12,7 @@ using Business;
 using Business.Models;
 using Business.Services;
 using Business.Results.Bases;
+using Microsoft.AspNetCore.Authorization;
 
 //Generated from Custom Template.
 namespace MVC.Controllers
@@ -48,47 +49,60 @@ namespace MVC.Controllers
         }
 
         // GET: Movies/Create
+        // TODO: Add service injections here
+        // TODO: Add service injections here
+        [Authorize]
         public IActionResult Create()
         {
+            if (!User.HasClaim("Director", "true"))
+            {
+                // If the user is not a director, redirect to the index page
+                return RedirectToAction("Index", "Home"); // Change "Home" to the appropriate controller
+            }
+
             // TODO: Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
             ViewBag.Directors = new SelectList(_directoryService.Query().ToList(), "Id", "UserName");
             return View();
         }
 
-        // POST: Movies/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public IActionResult Create(MovieModel movie)
         {
+            if (!User.HasClaim("Director", "true"))
+            {
+                // If the user is not a director, redirect to the index page
+                return RedirectToAction("Index", "Home"); // Change "Home" to the appropriate controller
+            }
+
             if (ModelState.IsValid)
             {
                 // If model data is valid, insert service logic should be written here.
-                Result result = _movieService.Add(movie); // result referenced object can be of type SuccessResult or ErrorResult
+                Result result = _movieService.Add(movie);
+
                 if (result.IsSuccessful)
                 {
-                    // Way 1:
-                    //return RedirectToAction("GetList");
-                    // Way 2:
-                    TempData["Message"] = result.Message; // if there is a redirection, the data should be carried with TempData to the redirected action's view
-                    return RedirectToAction(nameof(Index)); // redirection to the action specified of this controller to get the updated list from database
+                    TempData["Message"] = result.Message;
+                    return RedirectToAction(nameof(Index));
                 }
-
-                // Way 1:  carrying data from the action with ViewData
-                //ViewBag.Message = result.Message; // ViewData["Message"] = result.Message;
-                // Way 2: sends data to view's validation summary
 
                 ModelState.AddModelError("", result.Message);
             }
+
             // TODO: Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
             ViewBag.Directors = new SelectList(_directoryService.Query().ToList(), "Id", "UserName");
             return View(movie);
         }
-
         // GET: Movies/Edit/5
         public IActionResult Edit(int id)
         {
+            if (!User.HasClaim("Director", "true"))
+            {
+                // If the user is not a director, redirect to the index page
+                return RedirectToAction("Login", "Directors"); // Change "Home" to the appropriate controller
+            }
+
             MovieModel movie = _movieService.Query().SingleOrDefault(u => u.Id == id); ; // TODO: Add get item service logic here
             if (movie == null)
             {
@@ -106,6 +120,12 @@ namespace MVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(MovieModel movie)
         {
+            if (!User.HasClaim("Director", "true"))
+            {
+                // If the user is not a director, redirect to the index page
+                return RedirectToAction("Login", "Directors"); // Change "Home" to the appropriate controller
+            }
+
             if (ModelState.IsValid)
             {
                 var result = _movieService.Update(movie); // update the user in the service
@@ -125,6 +145,12 @@ namespace MVC.Controllers
         // GET: Movies/Delete/5
         public IActionResult Delete(int id)
         {
+            if (!User.HasClaim("Director", "true"))
+            {
+                // If the user is not a director, redirect to the index page
+                return RedirectToAction("Login", "Directors"); // Change "Home" to the appropriate controller
+            }
+
             MovieModel movie = _movieService.Query().SingleOrDefault(u => u.Id == id); // TODO: Add get item service logic here
             if (movie == null)
             {
@@ -138,6 +164,12 @@ namespace MVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
+            if (!User.HasClaim("Director", "true"))
+            {
+                // If the user is not a director, redirect to the index page
+                return RedirectToAction("Login", "Directors"); // Change "Home" to the appropriate controller
+            }
+
             var result = _movieService.DeleteUser(id);
             TempData["Message"] = result.Message;
             // TODO: Add delete service logic here

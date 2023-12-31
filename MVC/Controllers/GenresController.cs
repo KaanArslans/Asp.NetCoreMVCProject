@@ -31,6 +31,12 @@ namespace MVC.Controllers
         // GET: Genres
         public IActionResult Index()
         {
+            if (!User.HasClaim("Director", "true"))
+            {
+                // If the user is not a director, redirect to the index page
+                return RedirectToAction("Login", "Directors"); // Change "Home" to the appropriate controller
+            }
+
             List<GenreModel> genreList = _genreService.GetList(); // TODO: Add get list service logic here
             return View(genreList);
         }

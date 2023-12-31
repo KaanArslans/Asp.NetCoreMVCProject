@@ -30,6 +30,13 @@ namespace MVC.Controllers
         // GET: Directors
         public IActionResult Index()
         {
+
+            if (!User.HasClaim("Director", "true"))
+            {
+                // If the user is not a director, redirect to the index page
+                return RedirectToAction("Login", "Directors"); // Change "Home" to the appropriate controller
+            }
+
             List<DirectoryModel> directorList = _directorService.Query().ToList(); ; // TODO: Add get list service logic here
             return View(directorList);
         }
@@ -147,7 +154,8 @@ namespace MVC.Controllers
             List<Claim> userClaims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, existingUser.UserName),
-                new Claim(ClaimTypes.Surname, existingUser.Surname)
+                new Claim(ClaimTypes.Surname, existingUser.Surname),
+                new Claim("Director", "true")
             };
 
             // creating an identity by the claim list and default cookie authentication
