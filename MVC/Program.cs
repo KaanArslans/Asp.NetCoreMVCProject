@@ -72,7 +72,7 @@ builder.Services.AddDbContext<Db>(options => options // options used in the AddD
 builder.Services.AddScoped<IDirectoryService, DirectorService>();
 
 builder.Services.AddScoped<IMovieService, MovieService>();
-
+builder.Services.AddScoped<IGenreService, GenreService>();
 #endregion
 
 builder.Services.AddControllersWithViews();

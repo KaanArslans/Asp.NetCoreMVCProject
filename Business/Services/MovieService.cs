@@ -24,7 +24,7 @@ public interface IMovieService
     Result Update(MovieModel model);
 
 	[Obsolete("Do not use this method anymore, use DeleteUser method instead!")]
-	Result Delete(int id);
+	//Result Delete(int id);
 
 	Result DeleteUser(int id);
 }
@@ -160,38 +160,38 @@ public class MovieService : IMovieService // UserService is a IUserService (User
     }
 
 	// Way 1:
-    public Result Delete(int id)
-	{
-        // for example if we wanted to get the first record of the UserResources DbSet there are 2 ways:
-        // Way 1:
-        //_db.UserResources.Where(ur => ur.UserId == id).FirstOrDefault();
-        // Way 2:
-        //_db.UserResources.FirstOrDefault(ur => ur.UserId == id);
+ //   public //Result Delete(int id)
+	//{
+ //       // for example if we wanted to get the first record of the UserResources DbSet there are 2 ways:
+ //       // Way 1:
+ //       //_db.UserResources.Where(ur => ur.UserId == id).FirstOrDefault();
+ //       // Way 2:
+ //       //_db.UserResources.FirstOrDefault(ur => ur.UserId == id);
 
-		// 1) deleting the relational user resource records:
-		// Since there may be none, one or more than one relational user resources, we filter by using Where
-		// LINQ method and get an IQueryable (can be thought as a collection) then create the user resource
-		// list by calling the ToList LINQ method.
-        var userResourceEntities = _db.MovieGenre.Where(ur => ur.MovieId == id).ToList();
+	//	// 1) deleting the relational user resource records:
+	//	// Since there may be none, one or more than one relational user resources, we filter by using Where
+	//	// LINQ method and get an IQueryable (can be thought as a collection) then create the user resource
+	//	// list by calling the ToList LINQ method.
+ //       var userResourceEntities = _db.MovieGenre.Where(ur => ur.MovieId == id).ToList();
 
-        // Way 1: we can iterate through each user resource and delete it from the db set by calling Remove method
-        // foreach (var userResourceEntity in userResourceEntities) 
-        // {
-        //     _db.UserResources.Remove(userResourceEntity);
-		//}
-        // Way 2: we can use the RemoveRange method to remove one collection from another
-        _db.MovieGenre.RemoveRange(userResourceEntities);
+ //       // Way 1: we can iterate through each user resource and delete it from the db set by calling Remove method
+ //       // foreach (var userResourceEntity in userResourceEntities) 
+ //       // {
+ //       //     _db.UserResources.Remove(userResourceEntity);
+	//	//}
+ //       // Way 2: we can use the RemoveRange method to remove one collection from another
+ //       _db.MovieGenre.RemoveRange(userResourceEntities);
 
-		// 2) deleting the user record:
-        var userEntity = _db.Movie.SingleOrDefault(u => u.id == id);
-        if (userEntity is null)
-            return new ErrorResult("User not found!");
-        _db.Movie.Remove(userEntity);
+	//	// 2) deleting the user record:
+ //       var userEntity = _db.Movie.SingleOrDefault(u => u.id == id);
+ //       if (userEntity is null)
+ //           return new ErrorResult("User not found!");
+ //       _db.Movie.Remove(userEntity);
 
-        _db.SaveChanges(); // changes in all of the db sets are commited to the database with Unit of Work
+ //       _db.SaveChanges(); // changes in all of the db sets are commited to the database with Unit of Work
 
-        return new SuccessResult("User deleted successfully.");
-	}
+ //       return new SuccessResult("User deleted successfully.");
+	//}
 
 	// Way 2: a better way
     public Result DeleteUser(int id)
