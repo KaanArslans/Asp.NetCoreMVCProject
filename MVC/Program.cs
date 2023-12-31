@@ -93,7 +93,7 @@ builder.Services
         // Way 1:
         //config.ExpireTimeSpan = TimeSpan.FromMinutes(30);
         // Way 2: getting minute value from appsettings.json
-        config.ExpireTimeSpan = TimeSpan.FromMinutes(1);
+        config.ExpireTimeSpan = TimeSpan.FromMinutes(30);
         // Allow the cookie created after logging into the system to be valid for 30 minutes.
         config.SlidingExpiration = true;
         // When SlidingExpiration is set to true, the user's cookie expiration is extended by a specific duration 

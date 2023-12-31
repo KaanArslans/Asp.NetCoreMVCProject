@@ -170,6 +170,14 @@ namespace MVC.Controllers
             // redirecting user to the home page
             return RedirectToAction("Index", "Home");
         }
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            // Sign the user out
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return RedirectToAction("Index", "Home"); // Redirect to the home page or any other page after logout
+        }
         #endregion
     }
 

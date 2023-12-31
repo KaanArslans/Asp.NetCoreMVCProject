@@ -13,7 +13,10 @@
     if (User.HasClaim("Director", "true"))
     {
             <p>you alredy have logged in</p>
-         
+        <form asp-controller="Directors" asp-action="Logout" method="post" class="form-inline">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-danger">Logout</button>
+        </form>
     }
     else
     {
