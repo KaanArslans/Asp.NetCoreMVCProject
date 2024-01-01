@@ -11,49 +11,27 @@
         <a class="btn btn-primary" asp-action="Create">Create New</a>
     </p>
 
-    <table class="table table-bordered table-striped">
-        <thead class="thead-dark">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Year)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Revenue)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.directorOutput)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Year)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Revenue)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.directorOutput)
-                    </td>
-                    <td>
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <!-- Placeholder image -->
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Movie Image">
+
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                        <p class="card-text">Year: @Html.DisplayFor(modelItem => item.Year)</p>
+                        <p class="card-text">Revenue: @Html.DisplayFor(modelItem => item.Revenue)</p>
+                        <p class="card-text">Director: @Html.DisplayFor(modelItem => item.directorOutput)</p>
                         <div class="btn-group" role="group">
                             <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
                             <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                             <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                         </div>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
