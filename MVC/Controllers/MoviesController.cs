@@ -31,9 +31,15 @@ namespace MVC.Controllers
         }
 
         // GET: Movies
-        public IActionResult Index()
+        public IActionResult Index(string searchString)
         {
-            List<MovieModel> movieList = _movieService.Query().ToList(); ; // TODO: Add get list service logic here
+            List<MovieModel> movieList = _movieService.Query().ToList();
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                movieList = movieList.Where(m => m.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            // TODO: Add get list service logic here
             return View(movieList);
         }
 

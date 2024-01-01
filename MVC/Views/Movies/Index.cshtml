@@ -10,7 +10,17 @@
     <p>
         <a class="btn btn-primary" asp-action="Create">Create New</a>
     </p>
-
+    @using (Html.BeginForm("Index", "Movies", FormMethod.Get, new { @class = "search-form" }))
+    {
+        <div class="input-group">
+            @Html.TextBox("searchString", null, new { @class = "form-control", placeholder = "Search for movies..." })
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-search"></i> Search
+                </button>
+            </div>
+        </div>
+    }
     <div class="row">
         @foreach (var item in Model)
         {
