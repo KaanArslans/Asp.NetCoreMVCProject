@@ -39,7 +39,7 @@
 						@Html.DisplayFor(modelItem => item.MovieCountOutput)
 					</td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.MovieNamesOutput)
+                    @Html.Raw( item.MovieNamesOutput)
                 </td>
 					<td>
 						<a asp-action="Details" asp-route-id="@item.Id">Details</a>&nbsp;|&nbsp;
